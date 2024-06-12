@@ -35,6 +35,10 @@ Route::get('/product', function (){
     return Inertia::render('ProductView');
 })->middleware(['auth', 'verified'])->name('product');
 
+Route::get('/single/product', function (){
+    $user = Auth::user();
+    return Inertia::render('SingleProduct');
+})->middleware(['auth', 'verified'])->name('single/product');
 Route::get('/category', function (){
     $user = Auth::user();
     return Inertia::render('CategoryView');

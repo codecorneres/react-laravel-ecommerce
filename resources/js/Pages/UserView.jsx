@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react';
 import productsdetail from "@/utils/productsdetail";
 import categorydetail from "@/utils/categorydetail";
+import { Link } from '@inertiajs/react';
+
 export default function UserView() {
     const [productDetails, setProductDetails] = useState([]);
     const [CategoryDetails, setCategoryDetails] = useState([]);
@@ -79,6 +81,7 @@ export default function UserView() {
                         <div className="grid grid-cols-3 gap-4">
                             {productDetails.map((product, index) => (
                                 <div key={index} className="border p-4">
+                                <Link href="single/product">
                                     <img
                                         src={`/storage/app/products_images/${product.image}`}
                                         alt={product.name}
@@ -87,6 +90,7 @@ export default function UserView() {
                                     <h2 className="text-lg font-bold">
                                         {product.name}
                                     </h2>
+                                    </Link>
                                     <p>Price: {product.price}</p>
                                 </div>
                             ))}
