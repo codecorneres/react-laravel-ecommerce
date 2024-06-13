@@ -67,7 +67,7 @@ export default function ProductView({ auth }) {
                                             </Link>
                                         </div>
                                         <div className="hedding">
-                                            <h3 className="text-white text-2xl">
+                                            <h3 className=" text-2xl">
                                                 {" "}
                                                 Product View
                                             </h3>

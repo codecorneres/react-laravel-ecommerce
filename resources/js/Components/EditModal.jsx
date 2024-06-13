@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const EditModal = ({ category, onClose, updateCategoryData }) => {
-    const [isLoading, setIsLoading] = useState(false); // New state for loading status
-
+   
     // Define a state to hold the edited region data
     const [editedCategory, setEditedCategory] = React.useState({
         id: category.id,

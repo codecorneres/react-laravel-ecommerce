@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
-
+use App\Http\Controllers\CardController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -29,7 +29,12 @@ Route::get('/get/users', [AuthController::class, 'userDetails']);
 
   //--------------------------------product------------------------------------------//
   Route::get('/get/all/product', [ProductController::class, 'getProduct']);
+  Route::get('/get/single/product/{productId}', [ProductController::class, 'singleProduct']);
   Route::post('/create/product', [ProductController::class, 'createProduct']);
   Route::post('/update/product', [ProductController::class, 'updateProduct']);
   Route::post('/delete/product', [ProductController::class, 'destroyProduct']);
   Route::post('/filter/product', [ProductController::class, 'filterProduct']);
+//--------------------------------card------------------------------------------//
+Route::get('/get/card/product/{userId}', [CardController::class, 'getCard']);
+Route::post('/addtocard', [CardController::class, 'addToCard']);
+Route::post('/delete/card', [CardController::class, 'destroyCard']);

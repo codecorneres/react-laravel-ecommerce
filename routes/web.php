@@ -35,10 +35,16 @@ Route::get('/product', function (){
     return Inertia::render('ProductView');
 })->middleware(['auth', 'verified'])->name('product');
 
-Route::get('/single/product', function (){
+Route::get('/single/product/{id}', function ($id) {
     $user = Auth::user();
     return Inertia::render('SingleProduct');
-})->middleware(['auth', 'verified'])->name('single/product');
+})->middleware(['auth', 'verified'])->name('single.product.show');
+
+Route::get('/view/card/{id}', function ($id) {
+    $user = Auth::user();
+    return Inertia::render('ViewCard');
+})->middleware(['auth', 'verified'])->name('view.card.show');
+
 Route::get('/category', function (){
     $user = Auth::user();
     return Inertia::render('CategoryView');

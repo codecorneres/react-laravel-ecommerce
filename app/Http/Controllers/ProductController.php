@@ -148,6 +148,17 @@ public function destroyProduct(Request $request)
             return response()->json(['message' => 'Validation failed', 'errors' => $e->errors()], 422);
         }
     }
+    public function singleProduct($productId)
+    {
+        try {
+
+
+            $product = Product::where('id', $productId)->with('category')->get();
+            return response()->json(['success' => $product], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['message' => 'Validation failed', 'errors' => $e->errors()], 422);
+        }
+    }
     public function filterProduct(Request $request)
     {
         try {
