@@ -17,7 +17,7 @@ export default function Dashboard({ auth }) {
         >
             <Head title="Dashboard" />
 
-            <div className="py-12">
+            <div className="py-12 overflow-y-hidden">
                 {/* Conditionally render AdminView based on role_id */}
                 {user.role_id === 1 ? <AdminView /> : <UserView />}
             </div>

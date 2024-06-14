@@ -40,10 +40,10 @@ Route::get('/single/product/{id}', function ($id) {
     return Inertia::render('SingleProduct');
 })->middleware(['auth', 'verified'])->name('single.product.show');
 
-Route::get('/view/card/{id}', function ($id) {
+Route::get('/view/cart/{id}', function ($id) {
     $user = Auth::user();
-    return Inertia::render('ViewCard');
-})->middleware(['auth', 'verified'])->name('view.card.show');
+    return Inertia::render('ViewCart');
+})->middleware(['auth', 'verified'])->name('view.cart.show');
 
 Route::get('/category', function (){
     $user = Auth::user();

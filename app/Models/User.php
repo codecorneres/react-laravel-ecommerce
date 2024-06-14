@@ -48,8 +48,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
-    public function card()
+    public function cart()
     {
-        return $this->belongsToMany(Card::class);
+        return $this->belongsToMany(Cart::class);
     }
 }

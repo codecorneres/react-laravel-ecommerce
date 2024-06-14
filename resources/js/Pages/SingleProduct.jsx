@@ -14,25 +14,23 @@ export default function SingleProduct({ auth }) {
 
     const productId = getIdFromUrl();
     const handleAddClick = async (product) => {
-        
-            const raw = {
-                product_id: product.id,
-                user_id:user.id,
-              
-            };
-    console.log(raw ,"raw")
-            try {
-                const res = await axios.post("/api/addtocard", raw);
-                if (res.statusText != "OK") {
-                    throw new Error("Failed to update category");
-                }
-                console.log(res ,"raw")
-            } catch (error) {
-                // Handle errors
-                console.error("Error:", error);
-            }
+        const raw = {
+            product_id: product.id,
+            user_id: user.id,
         };
-   
+        console.log(raw, "raw");
+        try {
+            const res = await axios.post("/api/addtocart", raw);
+            if (res.statusText != "OK") {
+                throw new Error("Failed to update category");
+            }
+            console.log(res, "raw");
+        } catch (error) {
+            // Handle errors
+            console.error("Error:", error);
+        }
+    };
+
     useEffect(() => {
         const fetchProductDetails = async () => {
             try {
@@ -111,20 +109,18 @@ export default function SingleProduct({ auth }) {
                                                     sed.
                                                 </p>
                                             </div>
-                                             <div className="flex justify-between mt-6">
-                                            <button
-                                                onClick={() =>
-                                                    handleAddClick(product)
-                                                }
-                                        className="hover:table-fixed bg-blue-400 w-48 h-10 rounded-lg"
-                                    >
-                                      ADD TO CARD
-                                    </button>
-                                    </div>
+                                            <div className="flex justify-between mt-6">
+                                                <button
+                                                    onClick={() =>
+                                                        handleAddClick(product)
+                                                    }
+                                                    className="hover:table-fixed bg-blue-400 w-48 h-10 rounded-lg"
+                                                >
+                                                    ADD TO CART
+                                                </button>
+                                            </div>
                                         </div>
-                                        
                                     </div>
-                                    
                                 </div>
                             ))}
                         </div>

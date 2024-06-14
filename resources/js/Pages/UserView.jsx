@@ -51,7 +51,7 @@ export default function UserView() {
     }, []);
 
     return (
-        <div className="w-full">
+        <div className="w-full overflow-y-hidden">
             <div className="max-w-48 w-full px-3 mb-2">
                 <select
                     name="category_selector"
@@ -75,7 +75,7 @@ export default function UserView() {
                 src="https://static.vecteezy.com/system/resources/previews/003/240/365/non_2x/shopping-online-on-phone-paper-art-modern-pink-background-gifts-box-free-vector.jpg"
                 className=" mb-2 w-screen object-cover" // Use Tailwind classes for full-page image
             />
-            <h2 className="font-bold text-2xl flex justify-center mt-5">Featured Products</h2>
+            <h2 className=" overflow-y-hidden font-bold text-2xl flex justify-center mt-5">Featured Products</h2>
             <div className="flex flex-wrap gap-y-6 -mx-3">
                 <div className="max-w-48 w-full px-3 mb-2"></div>
                 <div className="product-table pt-20 pb-[220px]">

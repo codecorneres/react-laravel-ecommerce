@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import { RxCross2 } from "react-icons/rx";
 
-export default function ViewCard({ auth }) {
+export default function ViewCart({ auth }) {
     const { user } = auth;
     const [productDetails, setProductDetails] = useState(null);
     const userId = user.id;
@@ -27,12 +27,12 @@ export default function ViewCard({ auth }) {
         };
         try {
         // Send the request with axios
-        const res= await axios.post("/api/delete/card", raw,requestOptions);
+        const res= await axios.post("/api/delete/cart", raw,requestOptions);
         if(res.statusText!="OK"){
             throw new Error("Failed to update category");
         }
-            console.log("res:", res.data.Card);
-            setProductDetails(res.data.Card);
+            console.log("res:", res.data.Cart);
+            setProductDetails(res.data.Cart);
              
         } catch (error) {
             // Handle errors
@@ -44,10 +44,10 @@ export default function ViewCard({ auth }) {
         const fetchProductDetails = async () => {
             try {
                 const response = await axios.get(
-                    `/api/get/card/product/${userId}`
+                    `/api/get/cart/product/${userId}`
                 );
-                console.log(response.data.cardproduct);
-                setProductDetails(response.data.cardproduct);
+                console.log(response.data.cartproduct);
+                setProductDetails(response.data.cartproduct);
             } catch (error) {
                 console.error("Error fetching product details:", error);
             }
@@ -74,7 +74,7 @@ export default function ViewCard({ auth }) {
                                         <div className="hedding">
                                             <h3 className="text-2xl">
                                                 {" "}
-                                                Card View
+                                                Cart View
                                             </h3>
                                         </div>
                                     </div>
@@ -145,11 +145,11 @@ export default function ViewCard({ auth }) {
                                                             </td>
                                                             <td className="w-64 text-center py-2 px-3 font-medium">
                                                                 {
-                                                                    product.quaninty
+                                                                    product.quantity
                                                                 }
                                                             </td>
                                                             <td className="w-64 text-center py-2 px-3 font-medium">
-                                                                {product.quaninty *
+                                                                {product.quantity *
                                                                     product
                                                                         .product
                                                                         .price}
