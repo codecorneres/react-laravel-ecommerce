@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\PaymentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,6 +22,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('/get/users', [AuthController::class, 'userDetails']);
+                                                            
+Route::post('order/pay',[PaymentController::class,'payByStripe']);
+                                                            
+                                                        
  //--------------------------------Category------------------------------------------//
  Route::get('/get/all/category', [CategoryController::class, 'getCategory']);
  Route::post('/create/category', [CategoryController::class, 'createCategory']);

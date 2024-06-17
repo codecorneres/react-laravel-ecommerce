@@ -6,11 +6,9 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import { BsHandbagFill } from "react-icons/bs";
 import AddToCartModal from "@/Components/AddToCartModal";
-import fetchCartProductCount from "@/utils/fetchCartProductCount";
-export default function Authenticated({ user, header, children }) {
+export default function Authenticated({ user, header, children, AddtocartProductCount, fetchCartCount }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     const [showCartModal, setShowCartModal] = useState(false);
-    const [cartProductCount, setCartProductCount] = useState(0); // State to hold cart product count
     const handleCartIconClick = () => {
         setShowCartModal(true);
     };
@@ -18,20 +16,7 @@ export default function Authenticated({ user, header, children }) {
     const handleCloseCartModal = () => {
         setShowCartModal(false);
     };
-    const fetchCartCount = async () => {
-        try {
-            const CartCount = await fetchCartProductCount(user.id);
-            setCartProductCount(CartCount);
-            console.log(CartCount);
-           
-        } catch (error) {
-            console.log("errorrr");
-        }
-    };
-    useEffect(() => {
-        fetchCartCount();
-       
-    }, []);
+   
     return (
         <div className="min-h-screen bg-gray-100">
             <nav className="bg-white border-b border-gray-100">
@@ -67,8 +52,8 @@ export default function Authenticated({ user, header, children }) {
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
                             {user.role_id === 2 && (
                                 <button onClick={handleCartIconClick}>
-                                     {cartProductCount > 0 && (
-                                        <span className="bg-red-500 text-black rounded-full px-2 py-1 text-xs">{cartProductCount}</span>
+                                     {AddtocartProductCount > 0 && (
+                                        <span className="bg-red-500 text-black rounded-full px-2 py-1 text-xs">{AddtocartProductCount}</span>
                                     )}
                                     <BsHandbagFill />
                                    
@@ -211,6 +196,7 @@ export default function Authenticated({ user, header, children }) {
                 <AddToCartModal
                     onClose={handleCloseCartModal}
                     userId={user.id}
+                    fetchCartCount={fetchCartCount}
                 />
             )}
         </div>

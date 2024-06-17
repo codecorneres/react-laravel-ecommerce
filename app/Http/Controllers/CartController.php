@@ -61,7 +61,7 @@ class CartController extends Controller
     public function getCartCount(Request $Request)
     {
         try {
-            $cartCount = Cart::where('user_id', $Request->userId)->count();
+            $cartCount = Cart::where('user_id', $Request->userId)->sum('quantity');
     
             return response()->json(['cartCount' => $cartCount], 200);
         } catch (\Exception $e) {

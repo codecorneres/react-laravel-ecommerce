@@ -15,7 +15,7 @@ const fetchCartProductCount = async (userId) => {
 
         const data = await response.json();
         const cartCount = data.cartCount;
-        console.log(cartCount,'cartCount');
+        // console.log(cartCount,'cartCount');
         return cartCount;
     } catch (error) {
         console.error("Error fetching cart count:", error);

@@ -1,12 +1,12 @@
 import { Link } from "@inertiajs/react";
 import React, { useState, useEffect } from "react";
 import { RxCross2 } from "react-icons/rx";
-const AddToCartModal = ({ userId, onClose }) => {
+
+const AddToCartModal = ({ userId, onClose, fetchCartCount }) => {
     const [productDetails, setProductDetails] = useState(null);
     const [total, setTotal] = useState(0);
-
     const handleDelete = async (id) => {
-        console.log(id);
+    
         // Construct the request body with the edited region data
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -33,20 +33,22 @@ const AddToCartModal = ({ userId, onClose }) => {
             if (res.statusText != "OK") {
                 throw new Error("Failed to update category");
             }
-            console.log("res:", res.data.Cart, "setProduct");
+            // console.log("res:", res.data.Cart, "setProduct");
             setProductDetails(res.data.Cart);
+            fetchCartCount();
         } catch (error) {
             // Handle errors
             console.error("Error:", error);
         }
     };
+   
     useEffect(() => {
         const fetchProductDetails = async () => {
             try {
                 const response = await axios.get(
                     `/api/get/cart/product/${userId}`
                 );
-                console.log(response.data.cartproduct, "setProductDetails");
+                // console.log(response.data.cartproduct, "setProductDetails");
                 setProductDetails(response.data.cartproduct);
             } catch (error) {
                 console.error("Error fetching product details:", error);
@@ -54,6 +56,7 @@ const AddToCartModal = ({ userId, onClose }) => {
         };
 
         fetchProductDetails();
+      
     }, []);
     useEffect(() => {
         // Update total when productDetails changes
@@ -170,10 +173,19 @@ const AddToCartModal = ({ userId, onClose }) => {
                 </div>
                 <div className="py-10 flex justify-center">
                     <Link
-                        href={`view/cart/${userId}`}
+                        href={`/view/cart/${userId}`}
                         className="hover:table-fixed text-center  bg-blue-400 w-4/5 h-10 rounded-lg"
                     >
                         <span className="">VIEW CART </span>
+                    </Link>
+                    
+                </div>
+                <div className="flex justify-center">
+                <Link
+                        href={`/checkout`}
+                        className="hover:table-fixed text-center  bg-blue-400 w-4/5 h-10 rounded-lg"
+                    >
+                        <span className="">Checkout </span>
                     </Link>
                 </div>
             </div>

@@ -2,15 +2,31 @@ import { useState, useEffect } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import axios from "axios";
+import fetchCartProductCount from "@/utils/fetchCartProductCount";
 
 export default function SingleProduct({ auth }) {
     const { user } = auth;
     const [productDetails, setProductDetails] = useState(null);
+    const [AddtocartProductCount, setCartProductCount] = useState(0);
 
     const getIdFromUrl = () => {
         const urlParts = window.location.pathname.split("/");
         return urlParts[urlParts.length - 1];
     };
+
+    const fetchCartCount = async () => {
+        try {
+            const CartCount = await fetchCartProductCount(user.id);
+            setCartProductCount(CartCount);
+            // console.log(CartCount);
+           
+        } catch (error) {
+            console.log("errorrr");
+        }
+    };
+    useEffect(() => {
+        fetchCartCount();
+    }, []);
 
     const productId = getIdFromUrl();
     const handleAddClick = async (product) => {
@@ -25,6 +41,7 @@ export default function SingleProduct({ auth }) {
                 throw new Error("Failed to update category");
             }
             console.log(res, "raw");
+            fetchCartCount();
         } catch (error) {
             // Handle errors
             console.error("Error:", error);
@@ -38,6 +55,7 @@ export default function SingleProduct({ auth }) {
                     `/api/get/single/product/${productId}`
                 );
                 setProductDetails(response.data.success);
+         
             } catch (error) {
                 console.error("Error fetching product details:", error);
             }
@@ -52,6 +70,8 @@ export default function SingleProduct({ auth }) {
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight"></h2>
             }
+            AddtocartProductCount={AddtocartProductCount}
+            fetchCartCount={fetchCartCount}
         >
             <Head title="Single Product" />
 

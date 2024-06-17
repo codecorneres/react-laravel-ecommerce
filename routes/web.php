@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Middleware\Checkrole;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,12 +30,21 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-
-Route::get('/product', function (){
+Route::middleware(Checkrole::class)->group(function () {
+    Route::get('/category', function (){
+        $user = Auth::user();
+        return Inertia::render('CategoryView');
+    })->middleware(['auth', 'verified'])->name('category');
+    Route::get('/product', function (){
+        $user = Auth::user();
+        return Inertia::render('ProductView');
+    })->middleware(['auth', 'verified'])->name('product');
+    
+});
+Route::get('/checkout', function (){
     $user = Auth::user();
-    return Inertia::render('ProductView');
-})->middleware(['auth', 'verified'])->name('product');
-
+    return Inertia::render('Checkout');
+})->middleware(['auth', 'verified'])->name('category');
 Route::get('/single/product/{id}', function ($id) {
     $user = Auth::user();
     return Inertia::render('SingleProduct');
@@ -45,10 +55,7 @@ Route::get('/view/cart/{id}', function ($id) {
     return Inertia::render('ViewCart');
 })->middleware(['auth', 'verified'])->name('view.cart.show');
 
-Route::get('/category', function (){
-    $user = Auth::user();
-    return Inertia::render('CategoryView');
-})->middleware(['auth', 'verified'])->name('category');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
