@@ -7,6 +7,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\OrderController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,9 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('/get/users', [AuthController::class, 'userDetails']);
-                                                            
-Route::post('order/pay',[PaymentController::class,'payByStripe']);
-                                                            
+
                                                         
  //--------------------------------Category------------------------------------------//
  Route::get('/get/all/category', [CategoryController::class, 'getCategory']);
@@ -44,3 +44,7 @@ Route::get('/get/cart/product/{userId}', [CartController::class, 'getCart']);
 Route::post('/addtocart', [CartController::class, 'addToCart']);
 Route::post('/getCartCount', [CartController::class, 'getCartCount']);
 Route::post('/delete/cart', [CartController::class, 'destroyCart']);
+//--------------------------------Payment------------------------------------------//                                                            
+Route::post('order/pay',[PaymentController::class,'payByStripe']);
+//--------------------------------Order------------------------------------------//                                                            
+Route::get('get/order',[OrderController::class,'getOrder']);

@@ -39,6 +39,10 @@ Route::middleware(Checkrole::class)->group(function () {
         $user = Auth::user();
         return Inertia::render('ProductView');
     })->middleware(['auth', 'verified'])->name('product');
+    Route::get('/order', function (){
+        $user = Auth::user();
+        return Inertia::render('OrderView');
+    })->middleware(['auth', 'verified'])->name('order');
     
 });
 Route::get('/checkout', function (){

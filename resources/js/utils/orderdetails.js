@@ -1,18 +1,18 @@
-const categorydetail = async () => {
+const orderdetails = async () => {
     try {
 
     const requestOptions = {
         method: "GET",
         redirect: "follow",
     };
-    let data = await fetch("/api/get/all/category", requestOptions);
+    let data = await fetch("/api/get/order", requestOptions);
     data = await data.json()
-    const category =data.success
-    return category
+    const order =data.success
+    return order
         
     } catch (error) {
         return error 
     }
 
 };
-export default categorydetail
+export default orderdetails

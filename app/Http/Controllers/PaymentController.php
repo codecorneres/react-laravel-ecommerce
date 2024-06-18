@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Stripe\Stripe;
 use Stripe\Exception\ApiErrorException;
 use App\Http\Controllers\Controller;
-
+use App\Models\Order;
 class PaymentController extends Controller
 {
     /**
@@ -16,40 +16,62 @@ class PaymentController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function payByStripe(Request $request)
-    {
+{
+    try {
+        // Retrieve data from request
+        $user_id = $request->input('user_id');
+        $payment_method = $request->input('payment_method');
+        $products = $request->input('products');
+        $items = $request->input('items');
+
+        // Create a new Order instance
+        $order = new Order();
+        $order->user_id = $user_id;
+        $order->payment_method = $payment_method;
+
+        // Set products data
+        $orderProducts = [];
+        foreach ($products as $productData) {
+            $orderProducts[] = [
+                'product_id' => $productData['id'],
+                'quantity' => $productData['quantity'],
+
+            ];
+        }
+        $order->products = $orderProducts;
+
+        // Save the order
+        $order->save();
+
+        // Calculate order amount (in cents)
+        $amount = array_sum(array_column($items, 'amount'));
+
         // Set your Stripe API key from environment variable
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
-        try {
-            // Retrieve JSON payload from request body
-            $jsonObj = $request->json()->all();
+        // Create a PaymentIntent
+        $paymentIntent = \Stripe\PaymentIntent::create([
+            'amount' => $amount,
+            'currency' => 'usd',
+            'description' => 'Payment for your order',
+            'setup_future_usage' => 'on_session',
+        ]);
 
-            // Calculate order amount (in cents)
-            $amount = $this->calculateOrderAmount($jsonObj['items']);
+        // Return client secret to frontend
+        $output = [
+            'clientSecret' => $paymentIntent->client_secret,
+        ];
 
-            // Create a PaymentIntent
-            $paymentIntent = \Stripe\PaymentIntent::create([
-                'amount' => $amount,
-                'currency' => 'usd',
-                'description' => 'Payment for React Store',
-                'setup_future_usage' => 'on_session',
-            ]);
-
-            // Return client secret to frontend
-            $output = [
-                'clientSecret' => $paymentIntent->client_secret,
-            ];
-
-            return response()->json($output);
-
-        } catch (ApiErrorException $e) {
-            // Handle Stripe API errors
-            return response()->json(['error' => $e->getMessage()], 500);
-        } catch (\Exception $e) {
-            // Handle other generic exceptions
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        return response()->json($output);
+    } catch (ApiErrorException $e) {
+        // Handle Stripe API errors
+        return response()->json(['error' => $e->getMessage()], 500);
+    } catch (\Exception $e) {
+        // Handle other generic exceptions
+        return response()->json(['error' => $e->getMessage()], 500);
     }
+}
+
 
     /**
      * Calculate order total for Stripe (convert to cents)

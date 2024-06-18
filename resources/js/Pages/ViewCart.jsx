@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import { RxCross2 } from "react-icons/rx";
-
+import fetchCartProductCount from "@/utils/fetchCartProductCount";
 export default function ViewCart({ auth }) {
     const { user } = auth;
     const [productDetails, setProductDetails] = useState(null);
     const userId = user.id;
+    const [AddtocartProductCount, setCartProductCount] = useState(0);
     const handleDelete = async (id) => {
         console.log(id);
         // Construct the request body with the edited region data
@@ -55,13 +56,26 @@ export default function ViewCart({ auth }) {
 
         fetchProductDetails();
     }, []);
-
+    const fetchCartCount = async () => {
+        try {
+            const CartCount = await fetchCartProductCount(user.id);
+            setCartProductCount(CartCount);
+            // console.log(CartCount);
+           
+        } catch (error) {
+            console.log("errorrr");
+        }
+    };
+    useEffect(() => {
+        fetchCartCount();
+    }, []);
     return (
         <AuthenticatedLayout
             user={user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight"></h2>
             }
+            AddtocartProductCount={AddtocartProductCount}
         >
             <Head title="Product Page" />
             <div className="product-table pt-10 text-al pb-[220px] max-w-7xl mx-auto sm:px-6 lg:px-8">
