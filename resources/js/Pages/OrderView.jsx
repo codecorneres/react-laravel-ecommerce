@@ -36,14 +36,12 @@ export default function OrderView({ auth }) {
                         <div className="max-w-full mx-auto gap-y-5">
                             <div className="btn-flex py-4">
                                 <div className="container">
-                                    <div className="flex justify-between ">
-                                        <div className="hedding">
-                                            <h3 className=" text-2xl">
+                                <div className="hedding ">
+                                            <h3 className=" text-2xl text-center">
                                                 {" "}
                                                 Order View
                                             </h3>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                             <div className="data-table-main">
@@ -53,18 +51,19 @@ export default function OrderView({ auth }) {
                                         className="border-[1px] border-black text-[#100707] w-full border-b-black"
                                     >
                                         <thead>
-                                            <tr className="bg-slate-400 text-base">
+                                            <tr className="bg-blue-300 text-base">
                                                 <th className="py-4 px-3 w-64  font-semibold">
-                                                    Order Name
+                                                    Number
+                                                </th>
+                                                
+                                                <th className="py-4 px-3 w-64  font-semibold">
+                                                    Customer Name
                                                 </th>
                                                 <th className="py-4 px-3 w-64  font-semibold">
-                                                    Category Name
+                                                    Items
                                                 </th>
                                                 <th className="py-4 px-3 w-64  font-semibold">
-                                                    Price
-                                                </th>
-                                                <th className="py-4 px-3 w-64  font-semibold">
-                                                Quantity
+                                                Payment Method
                                                 </th>
                                             </tr>
                                         </thead>
@@ -75,31 +74,31 @@ export default function OrderView({ auth }) {
                                                     className="border-x-[1px] border-gray-700 border-b-[1px]"
                                                 >
                                                     <td className="w-64 text-center py-2 px-3 font-medium">
-                                                        {order.id}
+                                                       #128{order.id}
                                                     </td>
+                                                   
                                                     <td className="w-64 text-center py-2 px-3 font-medium">
-                                                        {order.status}
+                                                        {order.user.name}
+                                                    </td>
+                                                   
+                                                    <td className="w-64 text-center py-2 px-3 font-medium">
+                                                        <span>
+                                                            {order.products.reduce(
+                                                                (
+                                                                    acc,
+                                                                    product
+                                                                ) =>
+                                                                    acc +
+                                                                    parseInt(
+                                                                        product.quantity
+                                                                    ),
+                                                                0
+                                                            )}
+                                                            items
+                                                        </span>
                                                     </td>
                                                     <td className="w-64 text-center py-2 px-3 font-medium">
                                                         {order.payment_method}
-                                                    </td>
-                                                    <td className="w-64 text-center py-2 px-3 font-medium">
-                                                        <ul>
-                                                            {order.products.map(
-                                                                (product) => (
-                                                                    <li
-                                                                        key={
-                                                                            product.product_id
-                                                                        }
-                                                                    >
-                                                                       
-                                                                        {
-                                                                            product.quantity
-                                                                        }
-                                                                    </li>
-                                                                )
-                                                            )}
-                                                        </ul>
                                                     </td>
                                                 </tr>
                                             ))}

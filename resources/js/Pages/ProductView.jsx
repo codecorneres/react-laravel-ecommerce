@@ -61,7 +61,7 @@ export default function ProductView({ auth }) {
                                         <div className="btn ml-1">
                                             <Link
                                                 href={route("dashboard")}
-                                                className="py-2 px-4 inline-flex bg-slate-400 text-[#100707] rounded-md font-[700]"
+                                                className="py-2 px-4 inline-flex bg-blue-300  text-[#100707] rounded-md font-[700]"
                                             >
                                                 Back
                                             </Link>
@@ -75,7 +75,7 @@ export default function ProductView({ auth }) {
                                         <div className="">
                                             <button
                                                 onClick={handleAddClick}
-                                                className="py-2 px-4 inline-flex bg-slate-400 text-[#100707] rounded-md font-[700]"
+                                                className="py-2 px-4 inline-flex bg-blue-300  text-[#100707] rounded-md font-[700]"
                                             >
                                                 + Add
                                             </button>
@@ -90,7 +90,7 @@ export default function ProductView({ auth }) {
                                         className="border-[1px] border-black text-[#100707] w-full border-b-black"
                                     >
                                         <thead>
-                                            <tr className="bg-slate-400 text-base">
+                                            <tr className="bg-blue-300  text-base">
                                                 <th className="py-4 px-3 w-64  font-semibold">
                                                     Product Name
                                                 </th>

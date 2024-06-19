@@ -55,6 +55,8 @@ public function updateProduct(Request $request)
             'name' => $request->name,
             'category_id' => $request->category_id,
             'price' => $request->price, 
+            'color'=>$request->color,
+            'size'=>$request->size
         ];
       
         // Check if image file is provided in the request

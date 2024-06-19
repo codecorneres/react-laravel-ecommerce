@@ -3,17 +3,20 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\Product;
 
 class OrderController extends Controller
 {
     public function getOrder()
     {
         try {
-            $orders = Order::with('productdetail')->get();
-
-            return response()->json(['success' => $orders], 200);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json(['message' => 'Validation failed', 'errors' => $e->errors()], 422);
+            $orders = Order::with('user')->with('product')->get();
+    return response()->json(['success' => $orders], 200);
+        } catch (\Exception $e) {
+            // Catching more general exception class for robustness
+            return response()->json(['message' => 'Error fetching orders', 'error' => $e->getMessage()], 500);
         }
     }
+    
+    
 }

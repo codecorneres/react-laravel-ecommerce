@@ -44,6 +44,9 @@ export default function Authenticated({ user, header, children, AddtocartProduct
                                         <NavLink href={route("product")}>
                                             Product Management
                                         </NavLink>
+                                        <NavLink href={route("order")}>
+                                        Order Management
+                                        </NavLink>
                                     </>
                                 )}
                             </div>

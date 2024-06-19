@@ -32,30 +32,24 @@ Route::get('/dashboard', function () {
 
 Route::middleware(Checkrole::class)->group(function () {
     Route::get('/category', function (){
-        $user = Auth::user();
         return Inertia::render('CategoryView');
     })->middleware(['auth', 'verified'])->name('category');
     Route::get('/product', function (){
-        $user = Auth::user();
         return Inertia::render('ProductView');
     })->middleware(['auth', 'verified'])->name('product');
     Route::get('/order', function (){
-        $user = Auth::user();
         return Inertia::render('OrderView');
     })->middleware(['auth', 'verified'])->name('order');
     
 });
 Route::get('/checkout', function (){
-    $user = Auth::user();
     return Inertia::render('Checkout');
-})->middleware(['auth', 'verified'])->name('category');
+})->middleware(['auth', 'verified'])->name('checkout');
 Route::get('/single/product/{id}', function ($id) {
-    $user = Auth::user();
     return Inertia::render('SingleProduct');
 })->middleware(['auth', 'verified'])->name('single.product.show');
 
 Route::get('/view/cart/{id}', function ($id) {
-    $user = Auth::user();
     return Inertia::render('ViewCart');
 })->middleware(['auth', 'verified'])->name('view.cart.show');
 

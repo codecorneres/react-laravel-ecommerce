@@ -29,4 +29,8 @@ class Product extends Model
     {
         return $this->belongsToMany(Order::class);
     }
+    public function review()
+    {
+        return $this->belongsToMany(Review::class);
+    }
 }

@@ -7,6 +7,8 @@ const EditProductModal = ({ product, onClose, updateProductData }) => {
         id: product.id,
         name: product.name,
         price: product.price,
+        color:product.color,
+        size:product.size,
         image: product.image,
         category_id: product.category_id,
     });
@@ -32,7 +34,10 @@ const EditProductModal = ({ product, onClose, updateProductData }) => {
         formData.append("name", editedProduct.name);
         formData.append("price", editedProduct.price);
         formData.append("category_id", editedProduct.category_id);
+        formData.append("color",  editedProduct.color);
+        formData.append("size",  editedProduct.size);
         formData.append("image", editedProduct.image);
+       
         // console.log(formData, editedProduct)
 
         // Make the API call to update the product
@@ -153,6 +158,28 @@ const EditProductModal = ({ product, onClose, updateProductData }) => {
                                 id="price"
                                 name="price"
                                 value={editedProduct.price}
+                                onChange={handleChange}
+                                className="w-full rounded-md"
+                            />
+                        </div>
+                        <div className="field-single mb-4">
+                            <label htmlFor="price">Color:</label>
+                            <input
+                                type="text"
+                                id="color"
+                                name="color"
+                                value={editedProduct.color}
+                                onChange={handleChange}
+                                className="w-full rounded-md"
+                            />
+                        </div>
+                        <div className="field-single mb-4">
+                            <label htmlFor="price">Size:</label>
+                            <input
+                                type="text"
+                                id="size"
+                                name="size"
+                                value={editedProduct.size}
                                 onChange={handleChange}
                                 className="w-full rounded-md"
                             />

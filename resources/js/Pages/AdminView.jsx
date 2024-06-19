@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import usersdetail from "@/utils/usersdetail";
+import AddUserModal from "@/Components/AddUserModal";
 export default function AdminView({}) {
     const [UserDetails, setUserDetails] = useState([]);
+    const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
+
     const fetchUser = async () => {
         try {
             const userdata = await usersdetail();
@@ -9,6 +12,9 @@ export default function AdminView({}) {
         } catch (error) {
             console.log("errorrr");
         }
+    };
+    const handleAddClick = () => {
+        setShowAddCategoryModal(true); // Open the add modal
     };
     useEffect(() => {
         fetchUser();
@@ -20,15 +26,22 @@ export default function AdminView({}) {
                     <div className="container">
                         <div className="">
                             <div className="max-w-full mx-auto gap-y-5">
-                                Welcome Admin
                                 <div className="data-table-main">
                                     <div className="data-table relative">
+                                        <div className="add-button mb-2">
+                                            <button
+                                                onClick={handleAddClick}
+                                                className="py-2 px-4 inline-flex bg-blue-300  text-[#100707] rounded-md font-[700]"
+                                            >
+                                                + Add
+                                            </button>
+                                        </div>
                                         <table
                                             border="1"
                                             className="border-[1px] border-black text-[#100707] w-full border-b-black"
                                         >
                                             <thead>
-                                                <tr className="bg-slate-400 text-base">
+                                                <tr className="bg-blue-300  text-base">
                                                     <th className="py-4 px-3 w-64  font-semibold">
                                                         User Name
                                                     </th>
@@ -60,6 +73,22 @@ export default function AdminView({}) {
                                                 ))}
                                             </tbody>
                                         </table>
+                                        {/* Add Modal */}
+                                        {showAddCategoryModal && (
+                                            <AddUserModal
+                                                onClose={() =>
+                                                    setShowAddCategoryModal(
+                                                        false
+                                                    )
+                                                }
+                                                onSubmit={() => {
+                                                    setShowAddCategoryModal(
+                                                        false
+                                                    );
+                                                    fetchUser();
+                                                }}
+                                            />
+                                        )}
                                     </div>
                                 </div>
                             </div>

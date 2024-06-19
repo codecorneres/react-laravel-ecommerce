@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +24,9 @@ use App\Http\Controllers\OrderController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+//--------------------------------Auth------------------------------------------//
 Route::get('/get/users', [AuthController::class, 'userDetails']);
+Route::post('/add/user', [AuthController::class, 'store']);
 
                                                         
  //--------------------------------Category------------------------------------------//
@@ -48,3 +51,6 @@ Route::post('/delete/cart', [CartController::class, 'destroyCart']);
 Route::post('order/pay',[PaymentController::class,'payByStripe']);
 //--------------------------------Order------------------------------------------//                                                            
 Route::get('get/order',[OrderController::class,'getOrder']);
+//--------------------------------Review------------------------------------------//
+Route::get('/get/review', [ReviewController::class, 'reviewDetails']);
+Route::post('/add/review', [ReviewController::class, 'store']);
