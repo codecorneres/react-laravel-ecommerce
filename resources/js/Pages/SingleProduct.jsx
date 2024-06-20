@@ -11,6 +11,7 @@ import TextInput from "@/Components/TextInput";
 export default function SingleProduct({ auth }) {
     const { user } = auth;
     const [productDetails, setProductDetails] = useState(null);
+    const [reviewDetails, setReviewDetails] = useState(null);
     const [AddtocartProductCount, setCartProductCount] = useState(0);
     const [activeTab, setActiveTab] = useState("description");
 
@@ -38,7 +39,10 @@ export default function SingleProduct({ auth }) {
     }, []);
 
     const productId = getIdFromUrl();
-
+    const formData = {
+        productId: productId, // Include product ID if needed
+    };
+  
     const fetchProductDetails = async () => {
         try {
             const response = await axios.get(`/api/get/single/product/${productId}`);
@@ -47,9 +51,33 @@ export default function SingleProduct({ auth }) {
             console.error("Error fetching product details:", error);
         }
     };
-
+    const fetchReviewDetails = async () => {
+        try {
+            const response = await axios.post("/api/get/review",formData);
+            console.log(response.data.success,'response');
+            setReviewDetails(response.data.success);
+        } catch (error) {
+            console.error("Error fetching product details:", error);
+        }
+    };
+    const raw = {
+        product_id: productId, // Include product ID if needed
+        user_id:user.id,
+    };
+    const handleAddClick = async (product) => {
+        try {
+            // Example of adding product to cart (send request to backend)
+            const response = await axios.post("/api/addtocart", raw);
+            // Update cart count locally
+            setCartProductCount(prevCount => prevCount + 1);
+            console.log("Product added to cart:", response.data);
+        } catch (error) {
+            console.error("Error adding product to cart:", error);
+        }
+    };
     useEffect(() => {
         fetchProductDetails();
+        fetchReviewDetails();
     }, []);
 
     const toggleTab = (tab) => {
@@ -75,7 +103,9 @@ export default function SingleProduct({ auth }) {
         try {
             // Example of submitting data to backend
             const res = await axios.post("/api/add/review", formData);
-            console.log("Review submitted successfully:", res.data);
+           
+
+            console.log("Review submitted successfully:", res.data.review);
             // Optionally, reset form fields or update UI after submission
             setRating(0);
             setReview("");
@@ -291,9 +321,49 @@ export default function SingleProduct({ auth }) {
                                         )}
                                         {activeTab === "reviews" && (
                                             <div>
-                                                <p className="text-lg mt-4">
-                                                    There are no reviews yet.
-                                                </p>
+                                                {reviewDetails === null ? (
+                                                    <div>
+                                                        <p className="text-lg mt-4">
+                                                            There are no reviews
+                                                            yet.
+                                                        </p>
+                                                    </div>
+                                                ) : (
+                                                    <div>
+                                                        {/* Render reviews here based on reviewDetails */}
+                                                        {reviewDetails.map(
+                                                            (review, index) => (
+                                                                <div
+                                                                    key={index}
+                                                                    className="border-b">
+                                                                    <p className="text-lg mt-5">
+                                                                    {
+                                                                            review.name
+                                                                        }
+                                                                          </p>
+                                                                          <Rating
+                                                                        count={
+                                                                            5
+                                                                        }
+                                                                        size={
+                                                                            24
+                                                                        }
+                                                                        value={
+                                                                            review.rating
+                                                                        }
+                                                                        activeColor="#ffd700"
+                                                                        className="pointer-events-none opacity-50" // Apply CSS classes to make it non-clickable
+                                                                    /><p>
+                                                                         {
+                                                                            review.review
+                                                                        }
+                                                                    </p>
+                                                                    
+                                                                </div>
+                                                            )
+                                                        )}
+                                                    </div>
+                                                )}
 
                                                 <div className="mt-10 border-[1px] text-[#100707] w-full ">
                                                     <p className=" mt-10 ml-10 text-xl">
@@ -306,49 +376,80 @@ export default function SingleProduct({ auth }) {
                                                         Required fields are
                                                         marked *
                                                     </p>
-                                                    <form className="mt-1 py-5 px-10" onSubmit={handleSubmit}>
+                                                    <form
+                                                        className="mt-1 py-5 px-10"
+                                                        onSubmit={handleSubmit}
+                                                    >
                                                         <div className="mt-4">
-                                                            <label>Your rating *</label>
+                                                            <label>
+                                                                Your rating *
+                                                            </label>
                                                             <Rating
                                                                 count={5}
                                                                 size={24}
                                                                 value={rating}
-                                                                onChange={handleRatingChange}
+                                                                onChange={
+                                                                    handleRatingChange
+                                                                }
                                                                 activeColor="#ffd700"
                                                             />
                                                         </div>
                                                         <div className="mt-4">
-                                                            <InputLabel htmlFor="review" value="Your review *" />
+                                                            <InputLabel
+                                                                htmlFor="review"
+                                                                value="Your review *"
+                                                            />
                                                             <TextInput
                                                                 id="review"
                                                                 name="review"
                                                                 value={review}
-                                                                onChange={(e) => setReview(e.target.value)}
+                                                                onChange={(e) =>
+                                                                    setReview(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
                                                                 className="mt-1 block w-full h-24"
                                                                 autoComplete="review"
                                                                 required
                                                             />
                                                         </div>
                                                         <div className="mt-4">
-                                                            <InputLabel htmlFor="name" value="Name" />
+                                                            <InputLabel
+                                                                htmlFor="name"
+                                                                value="Name"
+                                                            />
                                                             <TextInput
                                                                 id="name"
                                                                 name="name"
                                                                 value={name}
-                                                                onChange={(e) => setName(e.target.value)}
+                                                                onChange={(e) =>
+                                                                    setName(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
                                                                 className="mt-1 block w-full"
                                                                 autoComplete="name"
                                                                 required
                                                             />
                                                         </div>
                                                         <div className="mt-4">
-                                                            <InputLabel htmlFor="email" value="Email" />
+                                                            <InputLabel
+                                                                htmlFor="email"
+                                                                value="Email"
+                                                            />
                                                             <TextInput
                                                                 id="email"
                                                                 type="email"
                                                                 name="email"
                                                                 value={email}
-                                                                onChange={(e) => setEmail(e.target.value)}
+                                                                onChange={(e) =>
+                                                                    setEmail(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
                                                                 className="mt-1 block w-full"
                                                                 autoComplete="email"
                                                                 required

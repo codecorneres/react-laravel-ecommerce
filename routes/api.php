@@ -42,6 +42,9 @@ Route::post('/add/user', [AuthController::class, 'store']);
   Route::post('/update/product', [ProductController::class, 'updateProduct']);
   Route::post('/delete/product', [ProductController::class, 'destroyProduct']);
   Route::post('/filter/product', [ProductController::class, 'filterProduct']);
+  Route::post('/import/csv', [ProductController::class, 'importCSV']);
+
+  
 //--------------------------------cart------------------------------------------//
 Route::get('/get/cart/product/{userId}', [CartController::class, 'getCart']);
 Route::post('/addtocart', [CartController::class, 'addToCart']);
@@ -52,5 +55,5 @@ Route::post('order/pay',[PaymentController::class,'payByStripe']);
 //--------------------------------Order------------------------------------------//                                                            
 Route::get('get/order',[OrderController::class,'getOrder']);
 //--------------------------------Review------------------------------------------//
-Route::get('/get/review', [ReviewController::class, 'reviewDetails']);
+Route::post('/get/review', [ReviewController::class, 'reviewDetails']);
 Route::post('/add/review', [ReviewController::class, 'store']);

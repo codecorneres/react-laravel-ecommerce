@@ -28,7 +28,38 @@ export default function ProductView({ auth }) {
         // console.log(data ,"update data");
         setProductDetails(data)
     }
-
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+    
+        try {
+            const formData = new FormData();
+            const file = event.target.files[0]; // Access the uploaded file correctly
+    
+            formData.append('file', file);
+    
+            const response = await fetch("/api/import/csv", {
+                method: 'POST',
+                body: formData,
+            });
+    
+            if (!response.ok) {
+                throw new Error("Failed to import CSV file");
+            }
+    
+            const responseData = await response.json();
+            console.log("CSV file imported successfully", responseData.product);
+    
+            // Optionally handle the product data here
+            setProductDetails(responseData.product);
+    
+        } catch (error) {
+            console.error("Error importing CSV file:", error);
+            // Handle error if needed (e.g., display error message)
+        }
+    };
+    
+    
+    
     useEffect(() => {
         fetchProducts();
     }, []);
@@ -59,12 +90,14 @@ export default function ProductView({ auth }) {
                                 <div className="container">
                                     <div className="flex justify-between ">
                                         <div className="btn ml-1">
-                                            <Link
-                                                href={route("dashboard")}
-                                                className="py-2 px-4 inline-flex bg-blue-300  text-[#100707] rounded-md font-[700]"
-                                            >
-                                                Back
-                                            </Link>
+                                            <form>
+                                                <input
+                                                    type="file"
+                                                    name="file"
+                                                    accept=".csv"
+                                                    onChange={handleSubmit}
+                                                />
+                                            </form>
                                         </div>
                                         <div className="hedding">
                                             <h3 className=" text-2xl">

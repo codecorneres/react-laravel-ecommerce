@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Category;
 
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
    
@@ -38,6 +41,79 @@ class ProductController extends Controller
             return response()->json(['message' => 'Validation failed', 'errors' => $e->errors()], 422);
         }
     }
+    public function importCSV(Request $request)
+{
+    try {
+        // Validate the request
+        $validator = $request->validate([
+            'file' => 'required|mimes:csv,txt|max:2048', // CSV file with size limit
+        ]);
+
+        // Retrieve the file
+        $file = $request->file('file');
+
+        // Parse the CSV file
+        $csv = array_map('str_getcsv', file($file));
+
+        // Start a database transaction
+        DB::beginTransaction();
+
+        try {
+            // Process each row
+            foreach ($csv as $row) {
+                // Ensure correct mapping and handle null values
+                $categoryId = isset($row[1]) ? $row[1] : null;
+                $name = isset($row[2]) ? $row[2] : null;
+                $size = isset($row[3]) ? $row[3] : null;
+                $price = isset($row[4]) ? (float) $row[4] : null;
+            
+                $imageName = isset($row[6]) ? $row[6] : null;
+
+                // Validate category_id if needed (optional step)
+                if ($categoryId !== null) {
+                    $categoryExists = Category::where('id', $categoryId)->exists();
+                    if (!$categoryExists) {
+                        throw new \Exception("Category with ID {$categoryId} does not exist.");
+                    }
+                }
+
+                // Prepare data to insert into database
+                $data = [
+                    'category_id' => $categoryId,
+                    'name' => $name,
+                    'size' => $size,
+                    'price' => $price,
+                    'color'=>$row[5],
+                    'image' => $imageName,
+                    'created_at' => now(), // Adjust as per your requirements
+                    'updated_at' => now(), // Adjust as per your requirements
+                ];
+
+                // Create a new product using Eloquent ORM
+               $newproduct= Product::create($data);
+               if($newproduct){
+                $products = Product::with('category')->get();
+               }
+                
+            }
+
+            // Commit the transaction if all data is inserted successfully
+            DB::commit();
+
+            return response()->json(['message' => 'Products imported successfully.', 'product' => $products ], 200);
+        } catch (\Exception $e) {
+            // Rollback the transaction if an error occurs
+            DB::rollback();
+            return response()->json(['message' => 'Failed to import products.', 'error' => $e->getMessage()], 500);
+        }
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return response()->json(['message' => 'Validation failed', 'errors' => $e->errors()], 422);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Failed to import products.', 'error' => $e->getMessage()], 500);
+    }
+}
+
+
 public function updateProduct(Request $request)
 {
     try {
